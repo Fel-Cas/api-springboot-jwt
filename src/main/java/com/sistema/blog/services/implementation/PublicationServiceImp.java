@@ -1,12 +1,17 @@
 package com.sistema.blog.services.implementation;
 
 import com.sistema.blog.dto.PublicationDTO;
+import com.sistema.blog.dto.PublicationResponse;
 import com.sistema.blog.entities.Publication;
 import com.sistema.blog.exceptions.BadRequestException;
 import com.sistema.blog.exceptions.ResourceNotFoundException;
 import com.sistema.blog.repositories.PublicationRepository;
 import com.sistema.blog.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +38,20 @@ public class PublicationServiceImp implements PublicationService {
     }
 
     @Override
-    public List<PublicationDTO> getAll() {
-        List<Publication> allPublications=this.publicationRepository.findAll();
-        return allPublications.stream().map(publication -> mapDTO(publication)).collect(Collectors.toList());
+    public PublicationResponse getAll(int numberPage, int pageSize, String orderBy) {
+        Pageable pageable= PageRequest.of(numberPage, pageSize, Sort.by(orderBy));
+        Page<Publication> publications = this.publicationRepository.findAll(pageable);
+        List<Publication> allPublications=publications.getContent();
+        List<PublicationDTO> content= allPublications.stream().map(publication -> mapDTO(publication)).collect(Collectors.toList());
+
+        PublicationResponse publicationResponse= new PublicationResponse();
+        publicationResponse.setContenido(content);
+        publicationResponse.setNumberPage(publications.getNumber());
+        publicationResponse.setSizePage(publications.getSize());
+        publicationResponse.setTotalElements(publications.getTotalElements());
+        publicationResponse.setTotalPages(publications.getTotalPages());
+        publicationResponse.setLastOne(publications.isLast());
+        return  publicationResponse;
     }
 
     @Override

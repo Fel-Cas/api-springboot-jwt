@@ -1,6 +1,7 @@
 package com.sistema.blog.controllers;
 
 import com.sistema.blog.dto.PublicationDTO;
+import com.sistema.blog.dto.PublicationResponse;
 import com.sistema.blog.entities.Publication;
 import com.sistema.blog.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,12 @@ public class PublicationController {
     private PublicationService publicationService;
 
     @GetMapping()
-    public  ResponseEntity<List<PublicationDTO>> getAll(){
-        return new ResponseEntity<>( this.publicationService.getAll(),HttpStatus.ACCEPTED);
+    public  ResponseEntity<PublicationResponse> getAll(
+            @RequestParam(value = "numberPage", defaultValue = "0", required = false) int numberPage,
+            @RequestParam(value = "pageSize",defaultValue = "10", required = false)int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String orderBy
+            ){
+        return new ResponseEntity<>( this.publicationService.getAll(numberPage,pageSize, orderBy),HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/{id}")
