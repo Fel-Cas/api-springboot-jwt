@@ -1,5 +1,7 @@
 package com.sistema.blog.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,6 +21,7 @@ public class Publication implements Serializable {
     @Column(name = "contenido", nullable = false)
     private  String content;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
     public Publication() {
@@ -63,4 +66,11 @@ public class Publication implements Serializable {
         this.content = content;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
 }

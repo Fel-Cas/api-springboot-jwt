@@ -7,6 +7,7 @@ import com.sistema.blog.exceptions.BadRequestException;
 import com.sistema.blog.exceptions.ResourceNotFoundException;
 import com.sistema.blog.repositories.PublicationRepository;
 import com.sistema.blog.services.PublicationService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,8 @@ public class PublicationServiceImp implements PublicationService {
 
     @Autowired
     PublicationRepository publicationRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public PublicationDTO create(PublicationDTO publicationDTO) {
@@ -80,21 +83,13 @@ public class PublicationServiceImp implements PublicationService {
 
     // Convierte entidad a DTO
     private PublicationDTO mapDTO(Publication publication){
-        return  new PublicationDTO.Builder()
-                .setId(publication.getId() )
-                .setTitle(publication.getTitle())
-                .setDescription(publication.getDescription())
-                .setContent(publication.getContent()).build();
+        PublicationDTO publicationDTO=modelMapper.map(publication, PublicationDTO.class);
+        return publicationDTO;
     }
 
     //Convierte DTO a Entity
     private Publication mapEntity(PublicationDTO publicationDTO){
-        Publication publication = new Publication();
-        publication.setId(publicationDTO.getId() );
-        publication.setTitle(publicationDTO.getTitle());
-        publication.setDescription(publicationDTO.getDescription());
-        publication.setContent(publicationDTO.getContent());
-        return publication;
+        return  modelMapper.map(publicationDTO, Publication.class);
     }
 
 

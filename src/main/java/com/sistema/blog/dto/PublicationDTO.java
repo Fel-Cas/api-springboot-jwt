@@ -1,13 +1,24 @@
 package com.sistema.blog.dto;
 
 
+import com.sistema.blog.entities.Comment;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.Set;
+
 public class PublicationDTO {
 
     private Long id;
+    @NotEmpty
+    @Size(min=3, message = "El titulo de la publicación debería tener al menos 3 caracteres")
     private String title;
+    @NotEmpty
+    @Size(min=10, message = "La descripción de la publicación debería tener al menos 10 caracteres")
     private String description;
+    @NotEmpty
     private  String content;
-
+    private Set<Comment> comments;
 
     public PublicationDTO() {
     }
@@ -50,51 +61,12 @@ public class PublicationDTO {
     public void setContent(String content) {
         this.content = content;
     }
-    public static class Builder{
 
-        private Long id;
-        private String title;
-        private String description;
-        private  String content;
+    public Set<Comment> getComments() {
+        return comments;
+    }
 
-        public PublicationDTO build() {
-            return new PublicationDTO(this.id,this.title,this.description, this.content);
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public Builder setId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Builder setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public Builder setContent(String content) {
-            this.content = content;
-            return this;
-        }
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }
