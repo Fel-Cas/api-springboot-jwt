@@ -1,9 +1,9 @@
 package com.sistema.blog.entities;
 
-import net.bytebuddy.dynamic.loading.PackageDefinitionStrategy;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "publicaciones", uniqueConstraints = {@UniqueConstraint(columnNames = {"titulo"})})
@@ -19,6 +19,8 @@ public class Publication implements Serializable {
     @Column(name = "contenido", nullable = false)
     private  String content;
 
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
     public Publication() {
     }
 
@@ -61,51 +63,4 @@ public class Publication implements Serializable {
         this.content = content;
     }
 
-    public static class Builder{
-
-        private Long id;
-        private String title;
-        private String description;
-        private  String content;
-
-         public Publication build() {
-            return new Publication(this.id,this.title,this.description, this.content);
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public Builder setId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Builder setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public Builder setContent(String content) {
-            this.content = content;
-            return this;
-        }
-    }
 }

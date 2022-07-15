@@ -28,11 +28,11 @@ public class PublicationServiceImp implements PublicationService {
         //Convertimos DTO a entidad
         if(this.publicationRepository.existsByTitle(publicationDTO.getTitle()))
             throw new BadRequestException("Ya hay una publicación con ese titulo");
-        Publication publication= new Publication.Builder()
-                .setId(publicationDTO.getId() )
-                .setTitle(publicationDTO.getTitle())
-                .setDescription(publicationDTO.getDescription())
-                .setContent(publicationDTO.getContent()).build();
+        Publication publication= new Publication();
+        publication.setId(publicationDTO.getId());
+        publication.setTitle(publicationDTO.getTitle());
+        publication.setDescription(publicationDTO.getDescription());
+        publication.setContent(publicationDTO.getContent());
 
         return this.mapDTO(this.publicationRepository.save(publication));
     }
@@ -89,11 +89,12 @@ public class PublicationServiceImp implements PublicationService {
 
     //Convierte DTO a Entity
     private Publication mapEntity(PublicationDTO publicationDTO){
-        return new Publication.Builder()
-                .setId(publicationDTO.getId() )
-                .setTitle(publicationDTO.getTitle())
-                .setDescription(publicationDTO.getDescription())
-                .setContent(publicationDTO.getContent()).build();
+        Publication publication = new Publication();
+        publication.setId(publicationDTO.getId() );
+        publication.setTitle(publicationDTO.getTitle());
+        publication.setDescription(publicationDTO.getDescription());
+        publication.setContent(publicationDTO.getContent());
+        return publication;
     }
 
 
