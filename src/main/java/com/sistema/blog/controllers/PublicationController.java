@@ -8,6 +8,7 @@ import com.sistema.blog.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,16 +36,19 @@ public class PublicationController {
         return  ResponseEntity.ok(this.publicationService.getById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<PublicationDTO> save( @Valid @RequestBody PublicationDTO publicationDTO){
         return  new ResponseEntity<>(this.publicationService.create(publicationDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PublicationDTO> update( @Valid @RequestBody PublicationDTO publicationDTO, @PathVariable(name = "id") Long id){
         return ResponseEntity.ok(this.publicationService.update(publicationDTO,id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public  ResponseEntity<PublicationDTO> delete(@PathVariable(name = "id") Long id){
         this.publicationService.delete(id);

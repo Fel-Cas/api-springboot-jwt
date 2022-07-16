@@ -69,7 +69,9 @@ public class PublicationServiceImp implements PublicationService {
     public PublicationDTO update(PublicationDTO publicationDTO, Long id) {
         Publication publicationFound=this.publicationRepository
                 .findById(id).orElseThrow(()-> new ResourceNotFoundException("Publicación","id",id));
-        publicationFound= this.mapEntity(publicationDTO);
+        publicationFound.setTitle(publicationDTO.getTitle());
+        publicationFound.setDescription(publicationDTO.getDescription());
+        publicationFound.setContent(publicationDTO.getContent());
         return this.mapDTO(this.publicationRepository.save(publicationFound));
     }
 
